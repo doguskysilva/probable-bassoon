@@ -5,39 +5,36 @@ def split_words(operable: str) -> str:
     output = ""
 
     for char in operable:
-        if char.islower():
-            output += char
-        elif char.isalpha():
-            if output == "":
-                output += char.lower()
-            else:
-                output += " " + char.lower()
+        if char.isalpha():
+            if output != "" and char.isupper():
+                output += " "
+
+            output += char.lower()
 
     return output
+
 
 def combine_words(operable: str, symbol: str) -> str:
-    output = ""
     words = operable.title().split(" ")
-    if symbol == "C":
-        output = "".join(words)
-    elif symbol == "M":
+
+    if symbol != "C":
         words[0] = words[0].lower()
+
+    if symbol == "M":
         words.append("()")
-        output = "".join(words)
-    else:
-        words[0] = words[0].lower()
-        output = "".join(words)
 
-    return output
+    return "".join(words)
 
-def camel_case(sample_input: str) -> str:
-    splited_input = sample_input.split(";")
-    operation = splited_input[0] # S split and C combine
-    symbol = splited_input[1] # M method, C class, and V variable
-    operable = splited_input[2]
 
-    return split_words(operable) if operation == "S" else combine_words(operable, symbol)
-        
+def camel_case(sample: str) -> str:
+    splited = sample.split(";")
+    operation = splited[0]  # S split and C combine
+    symbol = splited[1]  # M method, C class, and V variable
+    operable = splited[2]
+
+    return (
+        split_words(operable) if operation == "S" else combine_words(operable, symbol)
+    )
 
 
 @pytest.mark.parametrize(
@@ -51,8 +48,7 @@ def camel_case(sample_input: str) -> str:
         ("S;M;sweatTea()", "sweat tea"),
         ("S;V;epsonPrinter", "epson printer"),
         ("C;M;santa claus", "santaClaus()"),
-        ("C;C;mirror", "Mirror")
-
+        ("C;C;mirror", "Mirror"),
     ],
 )
 def test_camel_case(test_input, test_expected):
