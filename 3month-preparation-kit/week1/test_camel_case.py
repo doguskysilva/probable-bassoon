@@ -37,6 +37,44 @@ def camel_case(sample: str) -> str:
     )
 
 
+def split_words_pythonic(content: str) -> str:
+    result = []
+
+    for char in content:
+        if not char.isalpha():
+            continue
+
+        if result and char.isupper():
+            result.append(' ')
+
+        result.append(char.lower())
+
+    return "".join(result)
+
+
+def combine_words_pythonic(content: str, symbol: str) -> str:
+    words = [word.title() for word in content.split()]
+
+    if symbol in {'M', 'V'}:
+        words[0] = words[0].lower()
+
+    if symbol == 'M':
+        words.append('()')
+
+    return "".join(words)
+
+
+def camel_case_pythonic(sample: str) -> str:
+    operation, symbol, content = sample.split(";")
+
+    operations = {
+        "S": split_words_pythonic,
+        "C": lambda x: combine_words_pythonic(x, symbol),
+    }
+
+    return operations[operation](content)
+
+
 @pytest.mark.parametrize(
     "test_input,test_expected",
     [
@@ -53,3 +91,4 @@ def camel_case(sample: str) -> str:
 )
 def test_camel_case(test_input, test_expected):
     assert camel_case(test_input) == test_expected
+    assert camel_case_pythonic(test_input) == test_expected

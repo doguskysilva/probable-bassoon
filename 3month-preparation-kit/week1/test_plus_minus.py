@@ -1,9 +1,7 @@
 import pytest
 
 def plus_minus(arr):
-    less_zero = 0
-    greather_zero = 0
-    equal_zero = 0
+    less_zero = greather_zero = equal_zero = 0
     size_arr = len(arr)
 
     for i in arr:

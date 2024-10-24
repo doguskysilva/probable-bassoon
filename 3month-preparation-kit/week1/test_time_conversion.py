@@ -15,6 +15,15 @@ def time_conversion(timestamp):
     return newTime
 
 
+def time_conversion_pythonic(timestamp):
+    hour = int(timestamp[0:2])
+    isPM = timestamp[-2:] == "PM"
+
+    hours = hour % 12 + (12 if isPM else 0)
+
+    return f"{hours:02d}{timestamp[2:-2]}"
+
+
 @pytest.mark.parametrize(
     "test_input,test_expected",
     [
@@ -25,4 +34,4 @@ def time_conversion(timestamp):
 )
 def test_time_conversion(test_input, test_expected):
     assert time_conversion(test_input) == test_expected
-
+    assert time_conversion_pythonic(test_input) == test_expected
